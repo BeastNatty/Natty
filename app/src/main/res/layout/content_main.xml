@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".SetupGame"
+    tools:showIn="@layout/activity_main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/vintage_comic"
+        android:id="@+id/main_background"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/vintage_comic_simple"
+        android:id="@+id/second_background"
+        android:visibility="invisible"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:id="@+id/initial_layout"
+        android:visibility="visible">
+
+        <com.jeeps.charades.model.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/title"
+            android:text="Charades"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:textSize="25sp"
+            android:layout_marginBottom="120dp"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/play_button"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/round_button"
+            android:text="PLAY"
+            android:layout_marginBottom="20dp"/>
+
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:id="@+id/setup_layout"
+        android:visibility="invisible">
+
+        <com.jeeps.charades.model.CustomTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Words"
+            android:gravity="center_vertical"
+            android:id="@+id/words_text_title"
+            android:textSize="30sp"
+            android:textColor="#000"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/words_header"
+            android:layout_below="@id/words_text_title"
+            android:weightSum="100">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_item_text"
+                android:layout_below="@+id/words_header"
+                android:layout_weight="86"
+                android:textColor="#000"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/add_word_button"
+                android:src="@drawable/add_round"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="14"/>
+        </LinearLayout>
+
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/words_list_view"
+            android:layout_below="@id/words_header"
+            android:layout_above="@+id/duration_header"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/start_button"
+            android:layout_marginBottom="20dp"
+            android:id="@+id/duration_header"
+            android:weightSum="100">
+
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Duration"
+                android:id="@+id/duration_text"
+                android:textSize="30sp"
+                android:layout_below="@id/words_list_view"
+                android:layout_weight="50"
+                android:textColor="#000"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/duration_edit_text"
+                android:layout_below="@+id/duration_text"
+                android:textColor="#000"/>
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="START"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/start_button"
+            android:background="@drawable/round_button"/>
+
+        <com.jeeps.charades.model.CustomTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/start_button"
+            android:id="@+id/test"
+            android:textColor="#000"/>
+
+    </RelativeLayout>
+</RelativeLayout>

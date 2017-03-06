@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.jeeps.charades.GameScore"
+    tools:showIn="@layout/activity_game_score"
+    android:background="@drawable/vintage_comic_simple">
+
+    <com.jeeps.charades.model.CustomTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/message"
+        android:textSize="50sp"
+        android:text="message"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textColor="#000"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/score_layout"
+        android:weightSum="100"
+        android:orientation="horizontal"
+        android:layout_centerVertical="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Correct"
+                android:layout_weight="50"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal"
+                android:textColor="#000"/>
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/correct_score"
+                android:text="00"
+                android:textSize="20sp"
+                android:layout_weight="50"
+                android:gravity="center_horizontal"
+                android:textColor="#000"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:orientation="vertical"
+            android:weightSum="100">
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Incorrect"
+                android:textSize="20sp"
+                android:layout_marginBottom="10dp"
+                android:textStyle="bold"
+                android:layout_weight="50"
+                android:gravity="center_horizontal"
+                android:textColor="#000"/>
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/incorrect_score"
+                android:text="00"
+                android:layout_weight="50"
+                android:textSize="20sp"
+                android:gravity="center_horizontal"
+                android:textColor="#000"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="80dp"
+        android:gravity="center">
+
+
+        <Button
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:text="Play again!"
+            android:id="@+id/play_again_button"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/round_button"/>
+
+        <Button
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:text="Restart"
+            android:id="@+id/restart_button"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/round_button"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

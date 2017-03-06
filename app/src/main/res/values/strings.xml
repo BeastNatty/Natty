@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Charades</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_play_game">PlayGame</string>
+    <string name="title_activity_game_score">GameScore</string>
+    <string name="times_up_message">Time\'s up!</string>
+    <string name="completed_message">Completed!</string>
+</resources>
