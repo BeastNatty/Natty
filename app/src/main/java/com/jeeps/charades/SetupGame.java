@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -17,15 +18,18 @@ import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -56,12 +60,20 @@ public class SetupGame extends AppCompatActivity {
     protected EditText listItemEditText;
     protected Button startButton;
 
+    //Settings drawer
+    protected LinearLayout settingsDrawer;
+    protected ImageView toggleDrawer;
+    protected ImageView loadList;
+    protected ImageView SaveList;
+
     private List<String> wordList;
     private Game game;
 
     protected EditText durationEditText;
 
     public CustomTextView test;
+
+    private boolean isDrawerOpened;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +83,8 @@ public class SetupGame extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().hide();
+
+        isDrawerOpened = false;
 
         //create click sound
         clickSound = MediaPlayer.create(getApplicationContext(), R.raw.click);
@@ -88,6 +102,12 @@ public class SetupGame extends AppCompatActivity {
         listItemEditText = (EditText) findViewById(R.id.list_item_text);
         durationEditText = (EditText) findViewById(R.id.duration_edit_text);
         startButton = (Button) findViewById(R.id.start_button);
+
+        //Settings drawer
+        settingsDrawer = (LinearLayout) findViewById(R.id.settings_drawer);
+        toggleDrawer = (ImageView) findViewById(R.id.settings_drawer_arrow);
+        loadList = (ImageView) findViewById(R.id.load_list);
+        SaveList = (ImageView) findViewById(R.id.save_list);
 
         //Fonts
         Typeface tf = Typeface.createFromAsset(getAssets(), CustomTextView.getFont());
@@ -165,18 +185,53 @@ public class SetupGame extends AppCompatActivity {
             }
         });
 
+        toggleDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setToggleDrawer();
+            }
+        });
+
     }
 
     private void transitionToSetup() {
         setupLayout.setAlpha(0);
         setupLayout.setVisibility(View.VISIBLE);
+        settingsDrawer.setAlpha(0);
+        settingsDrawer.setVisibility(View.VISIBLE);
         ObjectAnimator fadeOut = ObjectAnimator.ofFloat(initialLayout, "alpha", 1, 0);
         ObjectAnimator fadeIn = ObjectAnimator.ofFloat(setupLayout, "alpha", 0, 1);
+        ObjectAnimator fadeDrawerIn = ObjectAnimator.ofFloat(settingsDrawer, "alpha", 0, 1);
 
         AnimatorSet fade = new AnimatorSet();
-        fade.playTogether(fadeOut, fadeIn);
+        fade.playTogether(fadeOut, fadeIn, fadeDrawerIn);
         fade.setDuration(400);
         fade.start();
+    }
+
+    private void setToggleDrawer() {
+        //Convert 100dp to pixels
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
+        if (isDrawerOpened) {
+            // Closing animator
+            ObjectAnimator close = ObjectAnimator.ofFloat(settingsDrawer, "translationX", 0, px);
+            close.setInterpolator(new AccelerateDecelerateInterpolator());
+            close.start();
+
+            //Change image
+            toggleDrawer.setImageResource(R.drawable.left_arrow);
+            isDrawerOpened = false;
+        } else {
+            // Opening animator
+            ObjectAnimator open = ObjectAnimator.ofFloat(settingsDrawer, "translationX", px, 0);
+            open.setInterpolator(new AccelerateDecelerateInterpolator());
+            open.start();
+
+            //Change image
+            toggleDrawer.setImageResource(R.drawable.right_arrow);
+            isDrawerOpened = true;
+        }
     }
 
     private void testGame() {

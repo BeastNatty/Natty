@@ -23,13 +23,15 @@
         android:background="@drawable/vintage_comic_simple"
         android:id="@+id/second_background"/>
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:id="@+id/initial_layout"
         android:background="@drawable/vintage_comic"
-        android:visibility="visible">
+        android:visibility="visible"
+        tools:visibility="invisible">
 
         <com.jeeps.charades.model.CustomTextView
             android:layout_width="wrap_content"
@@ -63,23 +65,37 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:id="@+id/setup_layout"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        tools:visibility="visible">
 
-        <com.jeeps.charades.model.CustomTextView
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Words"
-            android:gravity="center_vertical"
-            android:id="@+id/words_text_title"
-            android:textSize="30sp"
-            android:textColor="#000"/>
+            android:orientation="horizontal"
+            android:id="@+id/settings_header"
+            android:weightSum="100">
+
+            <com.jeeps.charades.model.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Words"
+                android:gravity="center_vertical"
+                android:id="@+id/words_text_title"
+                android:textSize="30sp"
+                android:textColor="#000"
+                android:layout_weight="50"/>
+
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/words_header"
-            android:layout_below="@id/words_text_title"
+            android:layout_below="@id/settings_header"
             android:weightSum="100">
 
             <EditText
@@ -155,4 +171,42 @@
             android:textColor="#000"/>
 
     </RelativeLayout>
+
+    <!-- 146 dp total for the drawer horizontally-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:translationX="100dp"
+        android:id="@+id/settings_drawer"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/left_arrow"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="4dp"
+            android:id="@+id/settings_drawer_arrow"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/add_list"
+            android:layout_marginRight="16dp"
+            android:id="@+id/load_list"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/add_list"
+            android:layout_marginRight="16dp"
+            android:id="@+id/save_list"/>
+
+    </LinearLayout>
+
+
 </RelativeLayout>
