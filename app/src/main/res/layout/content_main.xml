@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".SetupGame"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/main_container">
 
     <RelativeLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/vintage_comic"
@@ -19,14 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/vintage_comic_simple"
-        android:id="@+id/second_background"
-        android:visibility="invisible"/>
+        android:id="@+id/second_background"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:id="@+id/initial_layout"
+        android:background="@drawable/vintage_comic"
         android:visibility="visible">
 
         <com.jeeps.charades.model.CustomTextView
@@ -55,6 +57,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/vintage_comic_simple"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"

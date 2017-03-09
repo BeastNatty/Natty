@@ -1,5 +1,9 @@
 package com.jeeps.charades;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -9,6 +13,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Fade;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,7 +101,7 @@ public class SetupGame extends AppCompatActivity {
             public void onClick(View v) {
                 playClickSound(getApplicationContext());
 
-                switchLayouts();
+                transitionToSetup();
             }
         });
 
@@ -159,6 +167,18 @@ public class SetupGame extends AppCompatActivity {
 
     }
 
+    private void transitionToSetup() {
+        setupLayout.setAlpha(0);
+        setupLayout.setVisibility(View.VISIBLE);
+        ObjectAnimator fadeOut = ObjectAnimator.ofFloat(initialLayout, "alpha", 1, 0);
+        ObjectAnimator fadeIn = ObjectAnimator.ofFloat(setupLayout, "alpha", 0, 1);
+
+        AnimatorSet fade = new AnimatorSet();
+        fade.playTogether(fadeOut, fadeIn);
+        fade.setDuration(400);
+        fade.start();
+    }
+
     private void testGame() {
         /*final Player player = new Player(game);
         Thread thread = new Thread(player);
@@ -213,18 +233,6 @@ public class SetupGame extends AppCompatActivity {
                 mp.release();
             }
         });
-    }
-
-    private void switchLayouts() {
-        initialLayout.setVisibility(View.INVISIBLE);
-        setupLayout.setVisibility(View.VISIBLE);
-
-        //Backgrounds
-        RelativeLayout mainBG = (RelativeLayout) findViewById(R.id.main_background);
-        RelativeLayout secondBG = (RelativeLayout) findViewById(R.id.second_background);
-
-        mainBG.setVisibility(View.INVISIBLE);
-        secondBG.setVisibility(View.VISIBLE);
     }
 
     @Override
