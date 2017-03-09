@@ -5,26 +5,21 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.jeeps.charades.model.CardColor;
 import com.jeeps.charades.model.CustomTextView;
 import com.jeeps.charades.model.Game;
 
 import static com.jeeps.charades.SetupGame.*;
-import static com.jeeps.charades.PlayGame.*;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import me.grantland.widget.AutofitHelper;
 import me.grantland.widget.AutofitTextView;
 
 public class PlayGame extends AppCompatActivity {
@@ -76,7 +71,7 @@ public class PlayGame extends AppCompatActivity {
         wordsText.setTypeface(Typeface.createFromAsset(getAssets(), CustomTextView.getFont()));
         //AutofitHelper.create(wordsText);
 
-        //Initial background colo
+        //Initial background color
         playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
 
         //Create Game
@@ -188,15 +183,6 @@ public class PlayGame extends AppCompatActivity {
     }
 
     private void playCorrectSound() {
-        /*Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
-                mp.start();
-            }
-        });
-        t.start();*/
-
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -208,15 +194,6 @@ public class PlayGame extends AppCompatActivity {
     }
 
     private void playIncorrectSound() {
-        /*Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.incorrect);
-                mp.start();
-            }
-        });
-        t.start();*/
-
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.incorrect);
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

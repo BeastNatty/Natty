@@ -1,7 +1,5 @@
 package com.jeeps.charades;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -10,14 +8,8 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
-import android.transition.Transition;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
@@ -34,11 +26,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.jeeps.charades.controller.Player;
 import com.jeeps.charades.model.CustomTextView;
 import com.jeeps.charades.model.Game;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +56,8 @@ public class SetupGame extends AppCompatActivity {
     protected ImageView SaveList;
 
     private List<String> wordList;
-    private Game game;
 
     protected EditText durationEditText;
-
-    public CustomTextView test;
 
     private boolean isDrawerOpened;
 
@@ -234,52 +220,8 @@ public class SetupGame extends AppCompatActivity {
         }
     }
 
-    private void testGame() {
-        /*final Player player = new Player(game);
-        Thread thread = new Thread(player);
-        thread.start();
-        player.getGame().startGame();
-*/
-        int duration = Integer.parseInt(durationEditText.getText().toString());
-        game = new Game(wordList, duration);
-        game.startGame();
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (game.isRunning()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            test.setText(game.getSeconds() + "");
-                        }
-                    });
-                    game.tickTime();
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        thread.start();
-
-    }
-
     public static void playClickSound(final Context context) {
         //Play click sound
-        /*Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MediaPlayer mp = MediaPlayer.create(context, R.raw.click);
-                mp.start();
-            }
-        });
-        t.start();*/
-
         MediaPlayer mp = MediaPlayer.create(context, R.raw.click);
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
