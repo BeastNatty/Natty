@@ -73,8 +73,10 @@ public class GameScore extends AppCompatActivity {
         //Set values
         if (finishEvent == GUESSED_ALL)
             message.setText(R.string.completed_message);
-        else if (finishEvent == TIMES_UP)
+        else if (finishEvent == TIMES_UP) {
             message.setText(R.string.times_up_message);
+            playTimesUpSound();
+        }
 
         correctText.setText(correct + "");
         incorrectText.setText(incorrect + "");
@@ -98,6 +100,18 @@ public class GameScore extends AppCompatActivity {
         Intent restart = new Intent(GameScore.this, SetupGame.class);
         startActivity(restart);
         finish();
+    }
+
+    private void playTimesUpSound() {
+        //Play click sound
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.time_up);
+        mp.start();
+        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+            }
+        });
     }
 
 }
