@@ -71,11 +71,12 @@ public class GameScore extends AppCompatActivity {
         duration = intent.getIntExtra(DURATION, 0);
 
         //Set values
-        if (finishEvent == GUESSED_ALL)
+        if (finishEvent == GUESSED_ALL) {
             message.setText(R.string.completed_message);
-        else if (finishEvent == TIMES_UP) {
+            playEndSound(R.raw.hoorray);
+        } else if (finishEvent == TIMES_UP) {
             message.setText(R.string.times_up_message);
-            playTimesUpSound();
+            playEndSound(R.raw.time_up);
         }
 
         correctText.setText(correct + "");
@@ -102,9 +103,9 @@ public class GameScore extends AppCompatActivity {
         finish();
     }
 
-    private void playTimesUpSound() {
+    private void playEndSound(int id) {
         //Play click sound
-        MediaPlayer mp = MediaPlayer.create(this, R.raw.time_up);
+        MediaPlayer mp = MediaPlayer.create(this, id);
         mp.start();
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
