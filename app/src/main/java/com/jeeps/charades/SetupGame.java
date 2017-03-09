@@ -32,32 +32,36 @@ import com.jeeps.charades.model.Game;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnItemLongClick;
+
 public class SetupGame extends AppCompatActivity {
     protected static String WORDS_LIST = "words list";
     protected static String DURATION = "duration";
 
     protected MediaPlayer clickSound;
 
-    protected RelativeLayout initialLayout;
-    protected RelativeLayout setupLayout;
+    @BindView(R.id.initial_layout) RelativeLayout initialLayout;
+    @BindView(R.id.setup_layout) RelativeLayout setupLayout;
 
-    protected Button playButton;
+    @BindView(R.id.play_button) Button playButton;
 
     protected ArrayAdapter wordsAdapter;
-    protected ListView wordsListView;
-    protected ImageView addWordButton;
-    protected EditText listItemEditText;
-    protected Button startButton;
+    @BindView(R.id.words_list_view) ListView wordsListView;
+    @BindView(R.id.add_word_button) ImageView addWordButton;
+    @BindView(R.id.list_item_text) EditText listItemEditText;
+    @BindView(R.id.start_button) Button startButton;
+    @BindView(R.id.duration_edit_text) EditText durationEditText;
 
     //Settings drawer
-    protected LinearLayout settingsDrawer;
-    protected ImageView toggleDrawer;
-    protected ImageView loadList;
-    protected ImageView SaveList;
+    @BindView(R.id.settings_drawer) LinearLayout settingsDrawer;
+    @BindView(R.id.settings_drawer_arrow) ImageView toggleDrawer;
+    @BindView(R.id.load_list) ImageView loadList;
+    @BindView(R.id.save_list) ImageView SaveList;
 
     private List<String> wordList;
-
-    protected EditText durationEditText;
 
     private boolean isDrawerOpened;
 
@@ -67,10 +71,9 @@ public class SetupGame extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
         getSupportActionBar().hide();
-
-        isDrawerOpened = false;
 
         //create click sound
         clickSound = MediaPlayer.create(getApplicationContext(), R.raw.click);
@@ -78,106 +81,76 @@ public class SetupGame extends AppCompatActivity {
         //Soft keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        // Initialize vies
-        initialLayout = (RelativeLayout) findViewById(R.id.initial_layout);
-        playButton = (Button) findViewById(R.id.play_button);
-
-        setupLayout = (RelativeLayout) findViewById(R.id.setup_layout);
-        wordsListView = (ListView) findViewById(R.id.words_list_view);
-        addWordButton = (ImageView) findViewById(R.id.add_word_button);
-        listItemEditText = (EditText) findViewById(R.id.list_item_text);
-        durationEditText = (EditText) findViewById(R.id.duration_edit_text);
-        startButton = (Button) findViewById(R.id.start_button);
-
-        //Settings drawer
-        settingsDrawer = (LinearLayout) findViewById(R.id.settings_drawer);
-        toggleDrawer = (ImageView) findViewById(R.id.settings_drawer_arrow);
-        loadList = (ImageView) findViewById(R.id.load_list);
-        SaveList = (ImageView) findViewById(R.id.save_list);
-
         //Fonts
         Typeface tf = Typeface.createFromAsset(getAssets(), CustomTextView.getFont());
         listItemEditText.setTypeface(tf);
         startButton.setTypeface(tf);
         playButton.setTypeface(tf);
 
-        //Initial layout
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playClickSound(getApplicationContext());
-
-                transitionToSetup();
-            }
-        });
-
         //Setup layout
         wordList = new ArrayList<>();
         //Set adapter for words
         wordsAdapter = new ArrayAdapter(this, R.layout.list_item, wordList);
         wordsListView.setAdapter(wordsAdapter);
+        isDrawerOpened = false;
+    }
 
-        //Ability to delete single words
-        wordsListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                wordList.remove(position);
-                wordsAdapter.notifyDataSetChanged();
-                return true;
+    @OnClick(R.id.play_button)
+    public void play(View view) {
+        playClickSound(getApplicationContext());
+
+        transitionToSetup();
+    }
+
+    @OnItemLongClick(R.id.words_list_view)
+    public boolean deleteAddedItem(AdapterView<?> parent, View view, int position, long id) {
+        wordList.remove(position);
+        wordsAdapter.notifyDataSetChanged();
+        return true;
+    }
+
+    @OnClick(R.id.add_word_button)
+    public void addWord() {
+        String word = listItemEditText.getText().toString();
+
+        if (!word.isEmpty()) {
+            wordList.add(word);
+            wordsAdapter.notifyDataSetChanged();
+
+            //Empty edit text
+            listItemEditText.setText("");
+        } else {
+            Toast.makeText(SetupGame.this, "Can't add an empty word", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @OnClick(R.id.start_button)
+    public void startGame() {
+        playClickSound(getApplicationContext());
+
+        try {
+            // Get duration
+            int duration = Integer.parseInt(durationEditText.getText().toString());
+            if (wordList.isEmpty()) {
+                Toast.makeText(SetupGame.this, "Please add some words", Toast.LENGTH_LONG).show();
+            } else {
+
+                // pass game data to next activity
+                Intent intent = new Intent(SetupGame.this, PlayGame.class);
+                intent.putExtra(WORDS_LIST, (ArrayList<String>) wordList);
+                intent.putExtra(DURATION, duration);
+
+                startActivity(intent);
+                finish();
             }
-        });
+        } catch (NumberFormatException e) {
+            Toast.makeText(SetupGame.this, "That is not a valid number for the duration", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        addWordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String word = listItemEditText.getText().toString();
-
-                if (!word.isEmpty()) {
-                    wordList.add(word);
-                    wordsAdapter.notifyDataSetChanged();
-
-                    //Empty edit text
-                    listItemEditText.setText("");
-                } else {
-                    Toast.makeText(SetupGame.this, "Can't add an empty word", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        //Start game
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playClickSound(getApplicationContext());
-
-                try {
-                    // Get duration
-                    int duration = Integer.parseInt(durationEditText.getText().toString());
-                    if (wordList.isEmpty()) {
-                        Toast.makeText(SetupGame.this, "Please add some words", Toast.LENGTH_LONG).show();
-                    } else {
-
-                        // pass game data to next activity
-                        Intent intent = new Intent(SetupGame.this, PlayGame.class);
-                        intent.putExtra(WORDS_LIST, (ArrayList<String>) wordList);
-                        intent.putExtra(DURATION, duration);
-
-                        startActivity(intent);
-                        finish();
-                    }
-                } catch (NumberFormatException e) {
-                    Toast.makeText(SetupGame.this, "That is not a valid number for the duration", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        toggleDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setToggleDrawer();
-            }
-        });
-
+    @OnClick(R.id.settings_drawer_arrow)
+    public void toggleSettingsDrawer() {
+        setToggleDrawer();
     }
 
     private void transitionToSetup() {

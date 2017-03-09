@@ -20,6 +20,9 @@ import static com.jeeps.charades.SetupGame.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.grantland.widget.AutofitTextView;
 
 public class PlayGame extends AppCompatActivity {
@@ -33,11 +36,11 @@ public class PlayGame extends AppCompatActivity {
     private int duration;
     private ArrayList<String> words;
 
-    protected RelativeLayout playGameLayout;
-    protected CustomTextView durationText;
-    protected AutofitTextView wordsText;
-    protected ImageButton correctButton;
-    protected ImageButton incorrectButton;
+    @BindView(R.id.play_game_layout) RelativeLayout playGameLayout;
+    @BindView(R.id.duration_counter) CustomTextView durationText;
+    @BindView(R.id.words_text) AutofitTextView wordsText;
+    @BindView(R.id.correct_button) ImageButton correctButton;
+    @BindView(R.id.incorrect_button) ImageButton incorrectButton;
 
     private Game game;
 
@@ -51,6 +54,7 @@ public class PlayGame extends AppCompatActivity {
         setContentView(R.layout.activity_play_game);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
         //Hide action bar
         getSupportActionBar().hide();
@@ -60,20 +64,16 @@ public class PlayGame extends AppCompatActivity {
         words = intent.getStringArrayListExtra(WORDS_LIST);
         duration = intent.getIntExtra(DURATION, 0);
 
-        //Get views
-        playGameLayout = (RelativeLayout) findViewById(R.id.play_game_layout);
-        durationText = (CustomTextView) findViewById(R.id.duration_counter);
-        wordsText = (AutofitTextView) findViewById(R.id.words_text);
-        correctButton = (ImageButton) findViewById(R.id.correct_button);
-        incorrectButton = (ImageButton) findViewById(R.id.incorrect_button);
-
         //Auto fit textView
         wordsText.setTypeface(Typeface.createFromAsset(getAssets(), CustomTextView.getFont()));
         //AutofitHelper.create(wordsText);
 
         //Initial background color
         playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
+        setupGame();
+    }
 
+    private void setupGame() {
         //Create Game
         game = new Game(words, duration);
         isAnswering = true;
@@ -105,33 +105,6 @@ public class PlayGame extends AppCompatActivity {
         });
         thread.start();
 
-        //Set buttons
-        correctButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //play sound
-                playCorrectSound();
-
-                //Increase count
-                game.addCorrect();
-                //Next word
-                nextWord();
-            }
-        });
-        incorrectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //play sound
-                playIncorrectSound();
-
-                //Increase count
-                game.addIncorrect();
-                //Next word
-                nextWord();
-            }
-        });
-
-
         //Words
         Thread wordsThread = new Thread(new Runnable() {
             @Override
@@ -158,7 +131,28 @@ public class PlayGame extends AppCompatActivity {
             }
         });
         wordsThread.start();
+    }
 
+    @OnClick(R.id.correct_button)
+    public void addCorrect() {
+        //play sound
+        playCorrectSound();
+
+        //Increase count
+        game.addCorrect();
+        //Next word
+        nextWord();
+    }
+
+    @OnClick(R.id.incorrect_button)
+    public void addIncorrect() {
+        //play sound
+        playIncorrectSound();
+
+        //Increase count
+        game.addIncorrect();
+        //Next word
+        nextWord();
     }
 
     private void nextWord() {

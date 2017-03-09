@@ -13,6 +13,10 @@ import com.jeeps.charades.model.CustomTextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 import static com.jeeps.charades.PlayGame.*;
 import static com.jeeps.charades.SetupGame.*;
 
@@ -20,11 +24,11 @@ public class GameScore extends AppCompatActivity {
 
     protected MediaPlayer clickSound;
 
-    protected CustomTextView message;
-    protected CustomTextView correctText;
-    protected CustomTextView incorrectText;
-    protected Button playAgainButton;
-    protected Button restartButton;
+    @BindView(R.id.message) CustomTextView message;
+    @BindView(R.id.correct_score) CustomTextView correctText;
+    @BindView(R.id.incorrect_score) CustomTextView incorrectText;
+    @BindView(R.id.play_again_button) Button playAgainButton;
+    @BindView(R.id.restart_button) Button restartButton;
 
     private ArrayList<String> words;
     private int duration;
@@ -35,28 +39,12 @@ public class GameScore extends AppCompatActivity {
         setContentView(R.layout.activity_game_score);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
 
         getSupportActionBar().hide();
 
         //Create click sound
         clickSound = MediaPlayer.create(getApplicationContext(), R.raw.click);
-
-        //Get previous values
-        final Intent intent = getIntent();
-        int correct = intent.getIntExtra(CORRECT_SCORE, 0);
-        int incorrect = intent.getIntExtra(INCORRECT_SCORE, 0);
-        int finishEvent = intent.getIntExtra(FINISH_EVENT, 0);
-
-        //Get game values
-        words = intent.getStringArrayListExtra(WORDS_LIST);
-        duration = intent.getIntExtra(DURATION, 0);
-
-        //Set Views
-        message = (CustomTextView) findViewById(R.id.message);
-        correctText = (CustomTextView) findViewById(R.id.correct_score);
-        incorrectText = (CustomTextView) findViewById(R.id.incorrect_score);
-        playAgainButton = (Button) findViewById(R.id.play_again_button);
-        restartButton = (Button) findViewById(R.id.restart_button);
 
         //fonts for numbers
         Typeface typeface = Typeface.createFromAsset(getAssets(), CustomTextView.ARCHITECTS_DAUGHTER);
@@ -68,6 +56,20 @@ public class GameScore extends AppCompatActivity {
         playAgainButton.setTypeface(tf);
         restartButton.setTypeface(tf);
 
+        displayScore();
+    }
+
+    private void displayScore() {
+        //Get previous values
+        final Intent intent = getIntent();
+        int correct = intent.getIntExtra(CORRECT_SCORE, 0);
+        int incorrect = intent.getIntExtra(INCORRECT_SCORE, 0);
+        int finishEvent = intent.getIntExtra(FINISH_EVENT, 0);
+
+        //Get game values
+        words = intent.getStringArrayListExtra(WORDS_LIST);
+        duration = intent.getIntExtra(DURATION, 0);
+
         //Set values
         if (finishEvent == GUESSED_ALL)
             message.setText(R.string.completed_message);
@@ -76,30 +78,26 @@ public class GameScore extends AppCompatActivity {
 
         correctText.setText(correct + "");
         incorrectText.setText(incorrect + "");
+    }
 
-        playAgainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playClickSound(getApplicationContext());
+    @OnClick(R.id.play_again_button)
+    public void playAgain() {
+        playClickSound(getApplicationContext());
 
-                Intent playAgain = new Intent(GameScore.this, PlayGame.class);
-                playAgain.putExtra(WORDS_LIST, words);
-                playAgain.putExtra(DURATION, duration);
-                startActivity(playAgain);
-                finish();
-            }
-        });
+        Intent playAgain = new Intent(GameScore.this, PlayGame.class);
+        playAgain.putExtra(WORDS_LIST, words);
+        playAgain.putExtra(DURATION, duration);
+        startActivity(playAgain);
+        finish();
+    }
 
-        restartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                playClickSound(getApplicationContext());
+    @OnClick(R.id.restart_button)
+    public void restartGame() {
+        playClickSound(getApplicationContext());
 
-                Intent restart = new Intent(GameScore.this, SetupGame.class);
-                startActivity(restart);
-                finish();
-            }
-        });
+        Intent restart = new Intent(GameScore.this, SetupGame.class);
+        startActivity(restart);
+        finish();
     }
 
 }
