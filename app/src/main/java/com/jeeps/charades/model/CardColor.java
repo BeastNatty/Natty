@@ -5,12 +5,12 @@ package com.jeeps.charades.model;
  */
 
 public enum CardColor {
-    PINK("#f48fb1"),
-    PURPLE("#ce93d8"),
-    CYAN("#80deea"),
-    GREEN("#a5d6a7"),
-    LIME("#e6ee9c"),
-    ORANGE("#ffcc80");
+    PINK("#f06292"),
+    PURPLE("#ba68c8"),
+    CYAN("#4dd0e1"),
+    GREEN("#81c784"),
+    TEAL("#1de9b6"),
+    ORANGE("#ffb74d");
 
     private final String hexCode;
 
