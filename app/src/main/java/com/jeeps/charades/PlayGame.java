@@ -47,6 +47,7 @@ public class PlayGame extends AppCompatActivity {
     private boolean isAnswering;
     private boolean gameFinished = false;
     private String previousColor;
+    private int totalWords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class PlayGame extends AppCompatActivity {
         //Create Game
         game = new Game(words, duration);
         isAnswering = true;
+        totalWords = game.getWords().size();
 
         //Start Game
         game.startGame();
@@ -157,8 +159,11 @@ public class PlayGame extends AppCompatActivity {
 
     private void nextWord() {
         isAnswering = false;
-        //Change background color
-        playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
+        int wordsPassed = game.getCorrect() + game.getIncorrect();
+        if (wordsPassed < totalWords) {
+            //Change background color
+            playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
+        }
     }
 
     private void finishGame(int correct, int incorrect, int finishEvent) {
