@@ -33,7 +33,7 @@ public class TopicSQLiteHelper extends SQLiteOpenHelper {
     private static final String CREATE_PHRASES =
             "CREATE TABLE " + PHRASES_TABLE +
                     " (" + BaseColumns._ID +
-                    " INTEGER PRIMARY KEY AUTOINCREMENT. " +
+                    " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     COL_PHRASES_PHRASE + " TEXT, " +
                     COL_PHRASES_FOREIGN_TOPIC_ID + " INTEGER, " +
                     "FOREIGN KEY(" + COL_PHRASES_FOREIGN_TOPIC_ID + ") REFERENCES MEMES(_ID))";
