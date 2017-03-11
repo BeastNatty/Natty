@@ -2,6 +2,8 @@ package com.jeeps.charades;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -24,8 +26,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.jeeps.charades.adapters.CustomAdapterSpinner;
+import com.jeeps.charades.dialogs.SaveTopicDialog;
+import com.jeeps.charades.model.CardColor;
 import com.jeeps.charades.model.CustomTextView;
 import com.jeeps.charades.model.Game;
 
@@ -205,6 +212,13 @@ public class SetupGame extends AppCompatActivity {
         });
     }
 
+    @OnClick(R.id.save_list)
+    public void saveTopic() {
+        SaveTopicDialog dialog = new SaveTopicDialog(this.getApplicationContext());
+
+        dialog.show(getFragmentManager(), "TAG");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -216,10 +230,10 @@ public class SetupGame extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you spinnerecify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //noinspinnerection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
