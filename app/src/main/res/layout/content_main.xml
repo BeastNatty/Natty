@@ -33,7 +33,7 @@
         android:visibility="visible"
         tools:visibility="invisible">
 
-        <com.jeeps.charades.model.CustomTextView
+        <com.jeeps.charades.views.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -76,7 +76,7 @@
             android:id="@+id/settings_header"
             android:weightSum="100">
 
-            <com.jeeps.charades.model.CustomTextView
+            <com.jeeps.charades.views.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Words"
@@ -135,7 +135,7 @@
             android:weightSum="100">
 
 
-            <com.jeeps.charades.model.CustomTextView
+            <com.jeeps.charades.views.CustomTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Duration"
@@ -163,7 +163,7 @@
             android:id="@+id/start_button"
             android:background="@drawable/round_button"/>
 
-        <com.jeeps.charades.model.CustomTextView
+        <com.jeeps.charades.views.CustomTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/start_button"
