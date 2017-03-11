@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.jeeps.charades.model.CardColor;
@@ -40,6 +41,7 @@ public class PlayGame extends AppCompatActivity {
     @BindView(R.id.words_text) AutofitTextView wordsText;
     @BindView(R.id.correct_button) ImageButton correctButton;
     @BindView(R.id.incorrect_button) ImageButton incorrectButton;
+    @BindView(R.id.game_progress_bar) ProgressBar gameProgressBar;
 
     private Game game;
 
@@ -63,6 +65,9 @@ public class PlayGame extends AppCompatActivity {
         Intent intent = getIntent();
         words = intent.getStringArrayListExtra(WORDS_LIST);
         duration = intent.getIntExtra(DURATION, 0);
+
+        //Setup progressBar
+        gameProgressBar.setMax(words.size());
 
         //Auto fit textView
         wordsText.setTypeface(Typeface.createFromAsset(getAssets(), CustomTextView.getFont()));
@@ -162,7 +167,16 @@ public class PlayGame extends AppCompatActivity {
         if (wordsPassed < totalWords) {
             //Change background color
             playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //Increment progress
+                    int progress = game.getCorrect() + game.getIncorrect();
+                    gameProgressBar.setProgress(progress);
+                }
+            });
         }
+
     }
 
     private void finishGame(int correct, int incorrect, int finishEvent) {
