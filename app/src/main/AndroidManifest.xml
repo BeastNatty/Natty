@@ -33,11 +33,16 @@
             android:name=".GameScore"
             android:label="@string/title_activity_game_score"
             android:parentActivityName=".SetupGame"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jeeps.charades.SetupGame"/>
+        </activity>
+        <activity
+            android:name=".SelectLoadedTopics"
+            android:label="@string/title_activity_select_loaded_topics"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

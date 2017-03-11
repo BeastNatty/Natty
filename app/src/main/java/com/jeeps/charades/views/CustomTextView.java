@@ -1,4 +1,4 @@
-package com.jeeps.charades.model;
+package com.jeeps.charades.views;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,7 +11,7 @@ import static com.jeeps.charades.SetupGame.*;
 /**
  * Created by jeeps on 2/28/2017.
  */
-public class CustomTextView extends TextView {
+public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
 
     public static final String ARCHITECTS_DAUGHTER = "fonts/ArchitectsDaughter.ttf";
     public static final String GLORIA_HALLELUJAH = "fonts/GloriaHallelujah.ttf";

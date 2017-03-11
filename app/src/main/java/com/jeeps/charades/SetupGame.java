@@ -26,10 +26,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.jeeps.charades.model.CustomTextView;
-import com.jeeps.charades.model.Game;
+import com.jeeps.charades.dialogs.SaveTopicDialog;
+import com.jeeps.charades.views.CustomTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -40,6 +41,8 @@ import butterknife.OnItemLongClick;
 public class SetupGame extends AppCompatActivity {
     protected static String WORDS_LIST = "words list";
     protected static String DURATION = "duration";
+    public static String LOADING_LIST = "LOADING LIST";
+    public static String LOADED_PHRASES = "LOADED PHRASES";
 
     protected MediaPlayer clickSound;
 
@@ -88,7 +91,21 @@ public class SetupGame extends AppCompatActivity {
         playButton.setTypeface(tf);
 
         //Setup layout
-        wordList = new ArrayList<>();
+        //Check if there is a list being loaded
+        Intent intent = getIntent();
+        boolean isLoadingList = intent.getBooleanExtra(LOADING_LIST, false);
+        if (isLoadingList) {
+            //Hide main screen
+            initialLayout.setVisibility(View.INVISIBLE);
+            //Show setup
+            setupLayout.setVisibility(View.VISIBLE);
+            settingsDrawer.setVisibility(View.VISIBLE);
+
+            String[] loadedPhrases = intent.getStringArrayExtra(LOADED_PHRASES);
+            wordList = new ArrayList<>(Arrays.asList(loadedPhrases));
+        } else
+            wordList = new ArrayList<>();
+
         //Set adapter for words
         wordsAdapter = new ArrayAdapter(this, R.layout.list_item, wordList);
         wordsListView.setAdapter(wordsAdapter);
@@ -205,6 +222,22 @@ public class SetupGame extends AppCompatActivity {
         });
     }
 
+    @OnClick(R.id.save_list)
+    public void saveTopic() {
+        if (!wordList.isEmpty()) {
+            SaveTopicDialog dialog = new SaveTopicDialog(this.getApplicationContext(), wordList);
+
+            dialog.show(getFragmentManager(), "TAG");
+        } else
+            Toast.makeText(this, "Can't save an empty list", Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.load_list)
+    public void loadList() {
+        Intent intent = new Intent(this, SelectLoadedTopics.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -216,10 +249,10 @@ public class SetupGame extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you spinnerecify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //noinspinnerection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }

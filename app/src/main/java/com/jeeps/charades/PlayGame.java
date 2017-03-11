@@ -7,12 +7,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import com.jeeps.charades.model.CardColor;
-import com.jeeps.charades.model.CustomTextView;
+import com.jeeps.charades.views.CustomTextView;
 import com.jeeps.charades.model.Game;
 
 import static com.jeeps.charades.SetupGame.*;
