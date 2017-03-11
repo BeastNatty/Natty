@@ -2,8 +2,6 @@ package com.jeeps.charades;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,15 +24,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
-import com.jeeps.charades.adapters.CustomAdapterSpinner;
 import com.jeeps.charades.dialogs.SaveTopicDialog;
-import com.jeeps.charades.model.CardColor;
-import com.jeeps.charades.model.CustomTextView;
-import com.jeeps.charades.model.Game;
+import com.jeeps.charades.views.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -217,6 +210,12 @@ public class SetupGame extends AppCompatActivity {
         SaveTopicDialog dialog = new SaveTopicDialog(this.getApplicationContext());
 
         dialog.show(getFragmentManager(), "TAG");
+    }
+
+    @OnClick(R.id.load_list)
+    public void loadList() {
+        Intent intent = new Intent(this, SelectLoadedTopics.class);
+        startActivity(intent);
     }
 
     @Override

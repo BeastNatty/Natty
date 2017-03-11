@@ -5,4 +5,5 @@
     <string name="title_activity_game_score">GameScore</string>
     <string name="times_up_message">Time\'s up!</string>
     <string name="completed_message">Completed!</string>
+    <string name="title_activity_select_loaded_topics">SelectLoadedTopics</string>
 </resources>
