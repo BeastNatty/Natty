@@ -9,8 +9,11 @@ import android.view.View;
 import android.widget.GridView;
 
 import com.jeeps.charades.adapters.SavedItemsAdapter;
+import com.jeeps.charades.database.TopicDataSource;
 import com.jeeps.charades.model.CardColor;
 import com.jeeps.charades.model.Topic;
+
+import java.util.List;
 
 public class SelectLoadedTopics extends AppCompatActivity {
 
@@ -23,9 +26,15 @@ public class SelectLoadedTopics extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        Topic[] t = {new Topic(0, "POTATO", CardColor.CYAN.getHexCode(), null), new Topic(0, "POTATO", CardColor.PINK.getHexCode(), null), new Topic(0, "POTATO", CardColor.TEAL.getHexCode(), null)};
+        //Load saved Items
+        TopicDataSource dataSource = new TopicDataSource(this);
+        List<Topic> loadedTopics = dataSource.read();
+        //Convert to array
+        Topic[] topics = new Topic[loadedTopics.size()];
+        topics = loadedTopics.toArray(topics);
+
         GridView gridView = (GridView) findViewById(R.id.saved_items_grid);
-        gridView.setAdapter(new SavedItemsAdapter(this, t));
+        gridView.setAdapter(new SavedItemsAdapter(this, topics));
     }
 
 }
