@@ -33,14 +33,15 @@ import java.util.List;
 @SuppressLint("ValidFragment")
 public class SaveTopicDialog extends DialogFragment {
 
-    TopicDataSource mTopicDataSource;
-    Context mContext;
-    String mSelectedColor;
+    private TopicDataSource mTopicDataSource;
+    private Context mContext;
+    private List<String> mPhrases;
 
     @SuppressLint("ValidFragment")
-    public SaveTopicDialog(Context context) {
+    public SaveTopicDialog(Context context, List<String> phrases) {
         super();
         mContext = context;
+        mPhrases = phrases;
         //Initialize datasource
         mTopicDataSource = new TopicDataSource(mContext);
     }
@@ -93,10 +94,8 @@ public class SaveTopicDialog extends DialogFragment {
 
     private void saveTopic(String name, String hexColor) {
         List<Phrase> phrases = new ArrayList<>();
-        phrases.add(new Phrase(1, "Potato"));
-        phrases.add(new Phrase(1, "Potato"));
-        phrases.add(new Phrase(1, "Potato"));
-        phrases.add(new Phrase(1, "Potato"));
+        for (String word : mPhrases)
+            phrases.add(new Phrase(0, word));
 
         Topic topic = new Topic(1, name, hexColor, phrases);
         mTopicDataSource.create(topic);
