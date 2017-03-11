@@ -99,6 +99,8 @@ public class SaveTopicDialog extends DialogFragment {
 
         Topic topic = new Topic(1, name, hexColor, phrases);
         mTopicDataSource.create(topic);
+
+        Toast.makeText(mContext, "Topic saved succesfully!", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -8,10 +8,22 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.jeeps.charades.SelectLoadedTopics"
     tools:showIn="@layout/activity_select_loaded_topics"
-    android:background="@drawable/vintage_comic_simple"
-    android:padding="20dp">
+    android:background="@drawable/vintage_comic_simple">
+
+    <com.jeeps.charades.views.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:text="Saved Topics"
+        android:textStyle="bold"
+        android:id="@+id/saved_topics_text"
+        android:gravity="center"
+        android:textSize="40sp"
+        android:textColor="#000"/>
 
     <GridView
+        android:layout_below="@id/saved_topics_text"
         android:id="@+id/saved_items_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,6 +32,8 @@
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"
         android:stretchMode="columnWidth"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:gravity="center"/>
 
 </RelativeLayout>

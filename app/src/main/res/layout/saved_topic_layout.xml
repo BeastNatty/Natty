@@ -9,12 +9,9 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:id="@+id/saved_item_text"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="15dp"
+        android:textSize="30sp"
+        android:textAllCaps="false"
+        android:textColor="#000"
         android:text="TEST"
         />
 

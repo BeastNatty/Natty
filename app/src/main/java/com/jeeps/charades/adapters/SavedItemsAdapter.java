@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.jeeps.charades.database.TopicDataSource;
 import com.jeeps.charades.model.Phrase;
 import com.jeeps.charades.model.Topic;
 import com.jeeps.charades.views.CustomButton;
+import com.jeeps.charades.views.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,9 @@ public class SavedItemsAdapter extends BaseAdapter {
         button.setBackgroundResource(R.drawable.loaded_topics_background);
         GradientDrawable drawable = (GradientDrawable) button.getBackground();
         drawable.setColor(Color.parseColor(currentTopic.getColor()));
+        //Set font
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), CustomTextView.getFont());
+        button.setTypeface(tf);
 
         //Set click
         button.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +91,8 @@ public class SavedItemsAdapter extends BaseAdapter {
 
                         notifyDataSetChanged();
                         dialog.dismiss();
+
+                        Toast.makeText(context, "Topic Deleted", Toast.LENGTH_SHORT).show();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
