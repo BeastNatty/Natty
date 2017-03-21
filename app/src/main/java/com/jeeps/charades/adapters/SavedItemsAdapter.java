@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.jeeps.charades.views.CustomButton;
 import com.jeeps.charades.views.CustomTextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,8 +34,11 @@ import java.util.List;
 public class SavedItemsAdapter extends BaseAdapter {
     private Context context;
     private Topic[] items;
+    private Topic[] itemsBeforeDelete;
     LayoutInflater inflater;
     TopicDataSource mTopicDataSource;
+
+    private boolean deleted;
 
     public SavedItemsAdapter(Context context, Topic[] items) {
         this.context = context;
@@ -41,8 +47,7 @@ public class SavedItemsAdapter extends BaseAdapter {
         mTopicDataSource = new TopicDataSource(context);
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(int position, View convertView, final ViewGroup parent) {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.saved_topic_layout, null);
         }
@@ -67,7 +72,7 @@ public class SavedItemsAdapter extends BaseAdapter {
         button.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                promptForDeletion(currentTopic);
+                promptForDeletion(currentTopic, parent);
                 return true;
             }
         });
@@ -75,24 +80,60 @@ public class SavedItemsAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private void promptForDeletion(final Topic currentTopic) {
+    private void promptForDeletion(final Topic currentTopic, final ViewGroup viewGroup) {
+        deleted = true;
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle("Delete Topic?");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        mTopicDataSource.delete(currentTopic.getId());
+                        //Prompt undo un snackbar
+                        Snackbar snackbar = Snackbar.make(viewGroup, "TOPIC DELETED",
+                                Snackbar.LENGTH_SHORT)
+                                .setAction("UNDO", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //UNDO deletion
+                                        items = itemsBeforeDelete;
+                                        notifyDataSetChanged();
+                                        deleted = false;
+                                    }
+                                });
 
-                        //Update topics
-                        List<Topic> loadedTopics = mTopicDataSource.read();
-                        Topic[] topics = new Topic[loadedTopics.size()];
-                        topics = loadedTopics.toArray(topics);
-                        items = topics;
+                        //Callback for snackbar when dismissed
+                        snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                            @Override
+                            public void onDismissed(Snackbar transientBottomBar, int event) {
+                                super.onDismissed(transientBottomBar, event);
+                                //Delete item if it action wasn't undone
+                                if (deleted) {
+                                    mTopicDataSource.delete(currentTopic.getId());
 
-                        notifyDataSetChanged();
+                                    //Update topics
+                                    List<Topic> loadedTopics = mTopicDataSource.read();
+                                    items = listToArray(loadedTopics);
+
+                                    notifyDataSetChanged();
+                                }
+                            }
+
+                            @Override
+                            public void onShown(Snackbar transientBottomBar) {
+                                super.onShown(transientBottomBar);
+                                //remove topic from local dataset
+                                List<Topic> topics = new ArrayList<>(Arrays.asList(items));
+                                topics.remove(currentTopic);
+                                itemsBeforeDelete = items;
+                                items = listToArray(topics);
+
+                                notifyDataSetChanged();
+                            }
+                        });
+                        snackbar.show();
+
                         dialog.dismiss();
 
-                        Toast.makeText(context, "Topic Deleted", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Topic Deleted", Toast.LENGTH_SHORT).show();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
@@ -116,6 +157,12 @@ public class SavedItemsAdapter extends BaseAdapter {
         intent.putExtra(SetupGame.LOADING_LIST, true);
 
         context.startActivity(intent);
+    }
+
+    private Topic[] listToArray(List<Topic> topics) {
+        Topic[] topicsA = new Topic[topics.size()];
+        topicsA = topics.toArray(topicsA);
+        return topicsA;
     }
 
 
