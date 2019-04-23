@@ -56,7 +56,7 @@ public class PlayGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_game);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
@@ -89,54 +89,44 @@ public class PlayGame extends AppCompatActivity {
         //Start Game
         game.startGame();
         //Setup Duration countdown
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (game.isRunning()) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            durationText.setText(game.getSeconds() + "");
-                        }
-                    });
-                    game.tickTime();
+        Thread thread = new Thread(() -> {
+            while (game.isRunning()) {
+                runOnUiThread(() -> durationText.setText(game.getSeconds() + ""));
+                game.tickTime();
 
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                if (!gameFinished)
-                    finishGame(game.getCorrect(), game.getIncorrect(), TIMES_UP);
             }
+            if (!gameFinished)
+                finishGame(game.getCorrect(), game.getIncorrect(), TIMES_UP);
         });
         thread.start();
 
         //Words
-        Thread wordsThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (final String word : words) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            wordsText.setText(word);
-                        }
-                    });
+        Thread wordsThread = new Thread(() -> {
+            for (String word : words) {
+                runOnUiThread(() -> wordsText.setText(word));
 
-                    while (isAnswering) {
-                        try {
-                            Thread.sleep(0);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                while (isAnswering) {
+                    // break out of loop if game finished
+                    if (gameFinished)
+                        break;
+                    try {
+                        Thread.sleep(0);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    isAnswering = true;
                 }
-                if (!gameFinished)
-                    finishGame(game.getCorrect(), game.getIncorrect(), GUESSED_ALL);
+                isAnswering = true;
+                // break out of loop if game finished
+                if (gameFinished)
+                    break;
             }
+            if (!gameFinished)
+                finishGame(game.getCorrect(), game.getIncorrect(), GUESSED_ALL);
         });
         wordsThread.start();
     }
@@ -169,13 +159,10 @@ public class PlayGame extends AppCompatActivity {
         if (wordsPassed < totalWords) {
             //Change background color
             playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //Increment progress
-                    int progress = game.getCorrect() + game.getIncorrect();
-                    gameProgressBar.setProgress(progress);
-                }
+            runOnUiThread(() -> {
+                //Increment progress
+                int progress = game.getCorrect() + game.getIncorrect();
+                gameProgressBar.setProgress(progress);
             });
         }
 
@@ -199,23 +186,13 @@ public class PlayGame extends AppCompatActivity {
     private void playCorrectSound() {
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.correct);
         mp.start();
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-            }
-        });
+        mp.setOnCompletionListener(MediaPlayer::release);
     }
 
     private void playIncorrectSound() {
         MediaPlayer mp = MediaPlayer.create(getApplicationContext(), R.raw.incorrect);
         mp.start();
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-            }
-        });
+        mp.setOnCompletionListener(MediaPlayer::release);
     }
 
     private String getRandomCardColor() {
