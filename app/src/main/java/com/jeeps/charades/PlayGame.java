@@ -5,12 +5,12 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.jeeps.charades.controller.Player;
 import com.jeeps.charades.model.CardColor;
 import com.jeeps.charades.views.CustomTextView;
 import com.jeeps.charades.model.Game;
@@ -20,6 +20,8 @@ import static com.jeeps.charades.SetupGame.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

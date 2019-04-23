@@ -4,11 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import androidx.appcompat.widget.AppCompatButton;
+
 /**
  * Created by jeeps on 3/11/2017.
  */
 
-public class CustomButton extends android.support.v7.widget.AppCompatButton {
+public class CustomButton extends AppCompatButton {
     public CustomButton(Context context) {
         super(context);
     }

@@ -6,12 +6,14 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import static com.jeeps.charades.SetupGame.*;
 
 /**
  * Created by jeeps on 2/28/2017.
  */
-public class CustomTextView extends android.support.v7.widget.AppCompatTextView {
+public class CustomTextView extends AppCompatTextView {
 
     public static final String ARCHITECTS_DAUGHTER = "fonts/ArchitectsDaughter.ttf";
     public static final String GLORIA_HALLELUJAH = "fonts/GloriaHallelujah.ttf";
