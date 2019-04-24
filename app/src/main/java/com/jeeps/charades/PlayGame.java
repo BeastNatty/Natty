@@ -12,12 +12,14 @@ import android.widget.RelativeLayout;
 
 import com.jeeps.charades.controller.Player;
 import com.jeeps.charades.model.CardColor;
+import com.jeeps.charades.util.Timer;
 import com.jeeps.charades.views.CustomTextView;
 import com.jeeps.charades.model.Game;
 
 import static com.jeeps.charades.SetupGame.*;
 
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +29,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.grantland.widget.AutofitTextView;
 
-public class PlayGame extends AppCompatActivity {
+public class PlayGame extends AppCompatActivity
+        implements Timer.TimerListener {
 
     protected static String CORRECT_SCORE = "correct score";
     protected static String INCORRECT_SCORE = "incorrect score";
@@ -37,6 +40,7 @@ public class PlayGame extends AppCompatActivity {
 
     private int duration;
     private ArrayList<String> words;
+    private Queue<String> wordsQueue;
 
     @BindView(R.id.play_game_layout) RelativeLayout playGameLayout;
     @BindView(R.id.duration_counter) CustomTextView durationText;
@@ -51,6 +55,7 @@ public class PlayGame extends AppCompatActivity {
     private boolean gameFinished = false;
     private String previousColor;
     private int totalWords;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +94,8 @@ public class PlayGame extends AppCompatActivity {
         //Start Game
         game.startGame();
         //Setup Duration countdown
-        Thread thread = new Thread(() -> {
-            while (game.isRunning()) {
-                runOnUiThread(() -> durationText.setText(game.getSeconds() + ""));
-                game.tickTime();
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (!gameFinished)
-                finishGame(game.getCorrect(), game.getIncorrect(), TIMES_UP);
-        });
-        thread.start();
+        timer = new Timer(this, game.getSeconds());
+        timer.start();
 
         //Words
         Thread wordsThread = new Thread(() -> {
@@ -210,4 +202,15 @@ public class PlayGame extends AppCompatActivity {
         return color;
     }
 
+    @Override
+    public void onTick(int seconds) {
+        runOnUiThread(() -> durationText.setText(seconds + ""));
+        game.tickTime();
+    }
+
+    @Override
+    public void onFinish() {
+        finishGame(game.getCorrect(), game.getIncorrect(), TIMES_UP);
+        timer.stop();
+    }
 }
