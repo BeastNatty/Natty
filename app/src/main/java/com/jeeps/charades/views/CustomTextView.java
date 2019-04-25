@@ -42,7 +42,7 @@ public class CustomTextView extends AppCompatTextView {
             String font = GLORIA_HALLELUJAH;
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), font);
             currentFont = font;
-            setTypeface(tf);;
+            setTypeface(tf);
         }
     }
 

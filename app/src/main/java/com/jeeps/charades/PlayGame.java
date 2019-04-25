@@ -10,7 +10,6 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.jeeps.charades.controller.Player;
 import com.jeeps.charades.model.CardColor;
 import com.jeeps.charades.util.Timer;
 import com.jeeps.charades.views.CustomTextView;
@@ -53,10 +52,7 @@ public class PlayGame extends AppCompatActivity
 
     private Game game;
 
-    private boolean isAnswering;
-    private boolean gameFinished = false;
     private String previousColor;
-    private int totalWords;
     private Timer timer;
 
     @Override
@@ -73,13 +69,10 @@ public class PlayGame extends AppCompatActivity
         //Get previous values
         Intent intent = getIntent();
         words = intent.getStringArrayListExtra(WORDS_LIST);
-        Collections.shuffle(words);
-        wordsQueue = new ArrayDeque<>();
-        wordsQueue.addAll(words);
         duration = intent.getIntExtra(DURATION, 0);
 
         //Setup progressBar
-        gameProgressBar.setMax(wordsQueue.size());
+        gameProgressBar.setMax(words.size());
 
         //Auto fit textView
         wordsText.setTypeface(Typeface.createFromAsset(getAssets(), CustomTextView.getFont()));
@@ -92,14 +85,15 @@ public class PlayGame extends AppCompatActivity
 
     private void setupGame() {
         //Create Game
-        game = new Game(words, duration);
-        isAnswering = true;
-        totalWords = game.getWords().size();
+        game = new Game();
 
-        //Start Game
-        game.startGame();
+        // Shuffle words and put them in a queue
+        Collections.shuffle(words);
+        wordsQueue = new ArrayDeque<>();
+        wordsQueue.addAll(words);
+
         //Setup Duration countdown
-        timer = new Timer(this, game.getSeconds());
+        timer = new Timer(this, duration);
         timer.start();
 
         // Display first word
@@ -129,8 +123,6 @@ public class PlayGame extends AppCompatActivity
     }
 
     private void nextWord() {
-        isAnswering = false;
-
         String word = wordsQueue.poll();
         // finish game
         if (word == null)
@@ -148,7 +140,6 @@ public class PlayGame extends AppCompatActivity
 
     private void finishGame(int correct, int incorrect, int finishEvent) {
         timer.stop();
-        gameFinished = true;
         Intent intent = new Intent(this, GameScore.class);
         intent.putExtra(CORRECT_SCORE, correct);
         intent.putExtra(INCORRECT_SCORE, incorrect);
@@ -192,7 +183,6 @@ public class PlayGame extends AppCompatActivity
     @Override
     public void onTick(int seconds) {
         runOnUiThread(() -> durationText.setText(seconds + ""));
-        game.tickTime();
     }
 
     @Override
