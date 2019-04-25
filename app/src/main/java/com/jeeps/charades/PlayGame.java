@@ -18,7 +18,9 @@ import com.jeeps.charades.model.Game;
 
 import static com.jeeps.charades.SetupGame.*;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Queue;
 import java.util.Random;
 
@@ -71,10 +73,13 @@ public class PlayGame extends AppCompatActivity
         //Get previous values
         Intent intent = getIntent();
         words = intent.getStringArrayListExtra(WORDS_LIST);
+        Collections.shuffle(words);
+        wordsQueue = new ArrayDeque<>();
+        wordsQueue.addAll(words);
         duration = intent.getIntExtra(DURATION, 0);
 
         //Setup progressBar
-        gameProgressBar.setMax(words.size());
+        gameProgressBar.setMax(wordsQueue.size());
 
         //Auto fit textView
         wordsText.setTypeface(Typeface.createFromAsset(getAssets(), CustomTextView.getFont()));
@@ -97,30 +102,8 @@ public class PlayGame extends AppCompatActivity
         timer = new Timer(this, game.getSeconds());
         timer.start();
 
-        //Words
-        Thread wordsThread = new Thread(() -> {
-            for (String word : words) {
-                runOnUiThread(() -> wordsText.setText(word));
-
-                while (isAnswering) {
-                    // break out of loop if game finished
-                    if (gameFinished)
-                        break;
-                    try {
-                        Thread.sleep(0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                isAnswering = true;
-                // break out of loop if game finished
-                if (gameFinished)
-                    break;
-            }
-            if (!gameFinished)
-                finishGame(game.getCorrect(), game.getIncorrect(), GUESSED_ALL);
-        });
-        wordsThread.start();
+        // Display first word
+        wordsText.setText(wordsQueue.poll());
     }
 
     @OnClick(R.id.correct_button)
@@ -147,20 +130,24 @@ public class PlayGame extends AppCompatActivity
 
     private void nextWord() {
         isAnswering = false;
-        int wordsPassed = game.getCorrect() + game.getIncorrect();
-        if (wordsPassed < totalWords) {
+
+        String word = wordsQueue.poll();
+        // finish game
+        if (word == null)
+            finishGame(game.getCorrect(), game.getIncorrect(), GUESSED_ALL);
+        else {
+            // Display the next word
+            wordsText.setText(word);
             //Change background color
             playGameLayout.setBackgroundColor(Color.parseColor(getRandomCardColor()));
-            runOnUiThread(() -> {
-                //Increment progress
-                int progress = game.getCorrect() + game.getIncorrect();
-                gameProgressBar.setProgress(progress);
-            });
+            //Increment progress
+            int progress = game.getCorrect() + game.getIncorrect();
+            gameProgressBar.setProgress(progress);
         }
-
     }
 
     private void finishGame(int correct, int incorrect, int finishEvent) {
+        timer.stop();
         gameFinished = true;
         Intent intent = new Intent(this, GameScore.class);
         intent.putExtra(CORRECT_SCORE, correct);
@@ -211,6 +198,5 @@ public class PlayGame extends AppCompatActivity
     @Override
     public void onFinish() {
         finishGame(game.getCorrect(), game.getIncorrect(), TIMES_UP);
-        timer.stop();
     }
 }

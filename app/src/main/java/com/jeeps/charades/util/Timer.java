@@ -5,10 +5,12 @@ public class Timer {
     private Thread timerThread;
     private TimerListener timerListener;
     private int seconds;
+    private boolean isInterrupted;
 
     public Timer(TimerListener timerListener, int seconds) {
         this.timerListener = timerListener;
         this.seconds = seconds;
+        isInterrupted = false;
     }
 
     public interface TimerListener {
@@ -25,14 +27,19 @@ public class Timer {
                     timerListener.onTick(seconds);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
-            timerListener.onFinish();
+            if (!isInterrupted)
+                timerListener.onFinish();
         });
+        timerThread.setName("TIMER THREAD");
+        timerThread.setDaemon(true);
         timerThread.start();
     }
 
     public void stop() {
+        isInterrupted = true;
         timerThread.interrupt();
     }
 }
