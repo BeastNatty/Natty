@@ -93,6 +93,7 @@ public class PlayGame extends AppCompatActivity
         wordsQueue.addAll(words);
 
         //Setup Duration countdown
+        durationText.setText(duration + "");
         timer = new Timer(this, duration);
         timer.start();
 

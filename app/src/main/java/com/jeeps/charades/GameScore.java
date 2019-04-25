@@ -106,12 +106,7 @@ public class GameScore extends AppCompatActivity {
         //Play click sound
         MediaPlayer mp = MediaPlayer.create(this, id);
         mp.start();
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
-            }
-        });
+        mp.setOnCompletionListener(mp1 -> mp1.release());
     }
 
 }
